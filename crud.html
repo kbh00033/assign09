@@ -1,0 +1,200 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- 부트스트랩 아이콘 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+   
+
+    <script>
+        let members =[
+                {name:'김우성', studentId:'22300161' ,nickName:'스즈메', attendence:'4', phone:'010-1234-5678'},
+                {name:'高坂穂乃果', studentId:'17300161' ,nickName:'ほ', attendence:'4', phone:'070-9999-9999'},
+                {name:'北条沙都子', studentId:'24030102' ,nickName:'ニィニィ', attendence:'3', phone:'070-8888-8888'},
+        ]
+
+       let isIteditingTheList = null;
+
+       function clickVaildName(){
+            const checkNameTwo = document.querySelector("#name");
+            if (checkNameTwo.value.trim().length < 2) {
+                alert("이름을 2글자 이상 입력하세요.");
+                checkNameTwo.focus();
+                return false;
+            }
+            return true;
+       }
+
+       function clickVaildStudentIdNum(){
+            const checkstudentIdNum = document.querySelector("#studentId");
+                if(checkstudentIdNum.value.trim() < 15000000  || checkstudentIdNum.value.trim() > 25000000){
+                    alert("16학번~26학번 사이에서 입력할 수 있습니다!");
+                    checkstudentIdNum.focus();
+                    return false;
+                }
+                return true;
+        }
+
+       function clickVaildAttendenceNum(){
+            const checkAttendenceNum = document.querySelector("#attendence");
+            if(checkAttendenceNum.value.trim() < 0){
+                alert("음수가 입력된 듯 합니다!");
+                checkAttendenceNum.focus();
+                return false;
+            }
+            return true;
+        }
+
+        
+            
+       
+
+       
+
+       function render(){
+            const auto_add_theMemberList = document.getElementById('java_auto_add_theMemberList');
+
+            auto_add_theMemberList.innerHTML = '';
+            
+            members.forEach(function(person, index){ 
+                let add_tag_tr = document.createElement('tr');
+
+                add_tag_tr.innerHTML = `
+                    <td>${person.name}</td>
+                    <td>${person.studentId}</td>
+                    <td>${person.nickName}</td>
+                    <td>${person.attendence}</td>
+                    <td>${person.phone}</td>
+                    <td><button type="button" class="btn btn-success edit_btn"><i class="bi bi-pencil"></i></button></td>
+                    <td><button type="button" class="btn btn-danger dlt_btn"><i class="bi bi-trash3"></i></button></td>
+                `;        
+                
+                const editBtn = add_tag_tr.querySelector(".edit_btn");
+                editBtn.addEventListener("click", function(event){
+                    const nameInputForEdit = document.querySelector("#name");
+                    nameInputForEdit.value = person.name;
+
+                    const studentIdForEdit = document.querySelector("#studentId");
+                    studentIdForEdit.value = person.studentId;
+
+                    const nickNameForEdit = document.querySelector("#nickName");
+                    nickNameForEdit.value = person.nickName;
+
+                    const attendenceForEdit = document.querySelector("#attendence");
+                    attendenceForEdit.value = person.attendence;
+
+                    const phoneForEdit = document.querySelector("#phone");
+                    phoneForEdit.value = person.phone;
+
+                    isIteditingTheList = index;
+
+                });
+
+
+
+                const dlt_btn = add_tag_tr.querySelector(".dlt_btn");
+                dlt_btn.addEventListener("click", function(){
+                    if(confirm("삭제하면 되돌릴 수 없습니다. 삭제하시겠습니까?")){
+                        members.splice(index, 1);
+                        alert("삭제되었습니다");
+                        render();
+                    }
+                });
+                auto_add_theMemberList.appendChild(add_tag_tr);
+            })
+       }
+
+        
+        window.addEventListener("load", function(e){
+            render();
+            const addBtn = document.querySelector("#addBtn");
+            addBtn.addEventListener("click", function(){
+                const newName = document.querySelector("#name").value;
+                const newstudentId = document.querySelector("#studentId").value;
+                const newNickName = document.querySelector("#nickName").value;
+                const newAttendence = document.querySelector("#attendence").value;
+                const newPhone = document.querySelector("#phone").value;
+
+                const updatedPerson = {
+                        name: newName,
+                        studentId: newstudentId,
+                        nickName: newNickName,
+                        attendence: newAttendence,
+                        phone: newPhone
+                };
+                if(clickVaildName() && clickVaildStudentIdNum() && clickVaildAttendenceNum() == true){
+                    if(isIteditingTheList != null){
+                        members.splice(isIteditingTheList, 1, updatedPerson);
+                        alert("수정되었습니다");
+                        render();
+                        isIteditingTheList = null;
+                    } else {
+                        members.push(updatedPerson);
+                        alert("신규 맴버로 등록되었습니다");
+                        render();
+                    }
+
+                    document.querySelector("#name").value = "";
+                    document.querySelector("#studentId").value = "";
+                    document.querySelector("#nickName").value = "";
+                    document.querySelector("#attendence").value = "";
+                    document.querySelector("#phone").value = "";
+                }
+            });
+
+        });
+
+    
+    </script>
+
+</head>
+<body>
+    <header>
+        <header id="top" style="background-color: aquamarine;">
+        <div class="w-100 d-flex justify-content-between p-4 m-1">
+            <div id="top-left">                
+                <h1><strong class="text-decoration-none text-dark">HAC 인원 관리 시스템</h1>
+            </div>
+    </header>
+    <main style="margin: 10px">
+        <div id="adding_button" style="margin: 10px">
+            <h1>현학기 인원 관리</h1>
+            <div class="add_box display: flex justify-content: center align-items: center">
+                <input type="text" id="name" name="name" style="width: 300px" class="form-control mt-1" placeholder="이름 입력">
+                <input type="number" id="studentId" name="studentId" style="width: 300px" class="form-control mt-1" placeholder="학번 입력">
+                <input type="text" id="nickName" name="nickName" style="width: 300px" class="form-control mt-1" placeholder="별명 입력">
+                <input type="number" id="attendence" name="attendence" style="width: 300px" class="form-control mt-1" placeholder="출석 횟수 입력">
+                <input type="tel" id="phone" name="phone" style="width: 300px" class="form-control mt-1" placeholder="전화번호 입력">
+                <button type="button" id="addBtn" style="margin-top: 10px" class="btn btn-primary"><i class="bi bi-person-add"></i> 등록</button>
+            </div>
+            
+        </div>
+        <div id="middle_main">
+            <table class="table table-striped table-responsive table-sm w-100 text-center table-bordered">
+                <tr id="top-frame">
+                    <th>이름</th>
+                    <th>학번</th>
+                    <th>별명</th>
+                    <th>출석 횟수</th>
+                    <th>전화번호</th>
+                    <th>수정</th>
+                    <th>삭제</th>
+                </tr>
+                <tbody id="java_auto_add_theMemberList"></tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer id="buttom-frame" style="background-color: aquamarine;" class="w-100 d-flex justify-content-between p-4">
+        <div id="buttom-main">             
+            <h1><strong class="text-decoration-none text-dark">HAC 인원 관리 시스템</h1>
+        </div>
+    </footer>
+
+</body>
+</html>

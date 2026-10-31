@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <script>
+        console.log("현재 페이지 경로", location.pathname);
+
+       
+       
+        window.addEventListener("load", function(){
+            const count = document.querySelector('#timerNumber');
+            const start = document.querySelector('#start');
+            const stop = document.querySelector('#stop');
+            
+            if(!localStorage.getItem("Visited")){
+                alert("처음 방문해주셨군요!");
+                localStorge.setItem("Visited","A");
+            } else{
+                console.log("이미 방문");
+            }
+            localStorage.setItem('username', Alice);
+            const name = localStorage.setItem('username');
+        })
+    
+    </script>
+</head>
+<body>
+    <h1 id="timerNumber">0</h1>
+    <button id="start">start</button><button id="stop">stop</button>
+
+</body>
+</html>
